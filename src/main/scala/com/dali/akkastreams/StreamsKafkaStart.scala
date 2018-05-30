@@ -3,7 +3,6 @@ package com.dali.akkastreams
 import java.lang.Long
 import java.util.Properties
 import java.util.concurrent.TimeUnit
-import java.util.regex.Pattern
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization._
@@ -29,8 +28,6 @@ object StreamsKafkaStart extends App {
 
   val builder = new StreamsBuilder()
 
-  val pattern = Pattern.compile("\\W+", Pattern.UNICODE_CHARACTER_CLASS)
-
   val textLines: KStream[String, String] = builder.stream("streams-plaintext-input", Consumed.`with`(stringSerde, stringSerde))
 
   val worldCounts: KStream[String, Long] = textLines
@@ -47,6 +44,5 @@ object StreamsKafkaStart extends App {
   Runtime.getRuntime.addShutdownHook(new Thread(() => {
     streams.close(10, TimeUnit.SECONDS)
   }))
-
 
 }
